@@ -29,3 +29,5 @@ PROJECTS_DATA = [
         'live_url': None
     }
 ]
+
+SECRET_KEY = os.getenv('SECRET_KEY')

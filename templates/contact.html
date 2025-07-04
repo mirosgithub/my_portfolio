@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+          <p>{{ messages[0] }}</p>
+    {% endif %}
+  {% endwith %}
+
+  <h1>Let's Connect!</h1>
+  <form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.name.label }}<br>
+      {{ form.name(class='form-control') }}
+    </p>
+    <p>
+      {{ form.email.label }}<br>
+      {{ form.email(class='form-control') }}
+    </p>
+    <p>
+      {{ form.message.label }}<br>
+      {{ form.message(class='form-control') }}
+    </p>
+    <p>
+      {{ form.submit(class='btn btn-primary') }}
+    </p>
+  </form>
+</section>
+{% endblock %}
