@@ -69,4 +69,4 @@ def contact():
 
         return redirect(url_for('contact'))
     
-    return render_template('contact.html', title='Contact', form=form)
+    return render_template('contact.html', title='Contact', form=form, personal_info=PERSONAL_INFO)

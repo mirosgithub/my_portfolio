@@ -3,15 +3,20 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
-<section class="about-section">
-  <h1>About Me</h1>
+<section class="max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center pt-8 md:pt-12 lg:pt-16">About Me</h1>
 
-  <div class="profile-image">
-    <img src="{{ url_for('static', filename='images/' + personal_info.profile_image) }}" width="150" height="200">
-  </div>
+  <div class="grid md:grid-cols-5 gap-12 md:gap-12 lg:gap-16 items-start">
+    <div class="flex justify-center md:col-span-2">
+      <img src="{{ url_for('static', filename='images/' + personal_info.profile_image) }}"
+        alt="{{ personal_info.name }}" class="rounded-full shadow-lg w-80 h-80 object-cover">
+    </div>
 
-  <div class="about-text">
-    <p>{{ personal_info.bio }}</p>
+    <div class="space-y-6 md:col-span-3 md:pt-8 lg:pt-12">
+      <div class="prose prose-lg">
+        <p class="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl">{{ personal_info.bio }}</p>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}
