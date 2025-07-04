@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}
-Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>My Portfolio</h1>
+<section class="hero-section">
+  <h1>{{ personal_info.name }}</h1>
+  <h3>{{ personal_info.title }}</h3>
+</section>
 {% endblock %}
