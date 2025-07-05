@@ -15,14 +15,14 @@ PROJECTS_DATA = [
         'category': 'Web Development',
         'description': "Built this portfolio website using Flask as my first dive into web development. From learning Flask, WTForms, and Jinja templating to implementing SMTP email notifications and handling deployment, this project introduced me to the key aspects of full-stack development. It's not just a showcase, it's a testament to learning by doing.",
         'github_url': 'https://github.com/mirosgithub/my_portfolio', 
-        'live_url': 'http://127.0.0.1:5000/'
+        'live_url': None
     }, 
     {
         'title': 'IMC Prosperity 3', 
         'category': 'Algorithmic Trading Competition',
         'description': "Teamed up with fellow engineering and CS students to crack the code on algorithmic trading. We built our trading logic in Python, experimenting with different strategies and fine-tuning our approach through countless iterations. The collaborative coding experience with Git was just as valuable as the trading logic we developed. Proud to have placed 3rd in New Zealand!",
         'github_url': None, 
-        'live_url': None, 
+        'live_url': None
     },
     {
         'title': 'Time Crash',
