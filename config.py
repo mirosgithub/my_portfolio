@@ -13,7 +13,7 @@ PROJECTS_DATA = [
     {
         'title': 'Personal Portfolio Website', 
         'category': 'Web Development',
-        'description': "Built this portfolio from the ground up using Flask to dive deep into full-stack development. From designing the frontend to handling backend logic and deployment, this project taught me the complete web development lifecycle. It's not just a showcase, it's a testament to learning by doing.",
+        'description': "Built this portfolio website using Flask as my first dive into web development. From learning Flask, WTForms, and Jinja templating to implementing SMTP email notifications and handling deployment, this project introduced me to the key aspects of full-stack development. It's not just a showcase, it's a testament to learning by doing.",
         'github_url': 'https://github.com/mirosgithub/my_portfolio', 
         'live_url': 'http://127.0.0.1:5000/'
     }, 
