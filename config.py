@@ -13,7 +13,7 @@ PROJECTS_DATA = [
     {
         'title': 'Personal Portfolio Website', 
         'description': 'description',
-        'github_url': None, 
+        'github_url': 'https://github.com/mirosgithub/my_portfolio', 
         'live_url': 'http://127.0.0.1:5000/'
     }, 
     {
