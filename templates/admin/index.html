@@ -1,0 +1,12 @@
+{% extends "admin/master.html" %}
+
+{% block body %}
+<ul>
+  <li>
+    <a href="{{ url_for('home') }}">Return to Portfolio</a>
+  </li>
+  <li>
+    <a href="{{ url_for('admin.logout_view') }}">Logout</a>
+  </li>
+</ul>
+{% endblock %}
