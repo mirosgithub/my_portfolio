@@ -7,10 +7,19 @@ from forms import ContactForm
 from utils import send_notification_email
 from admin import MyAdminIndexView
 from database import init_db
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    if DATABASE_URL.startswith('postgres://'):
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+else:
+    DATABASE_PATH = os.path.join('/app/data', 'db.sqlite3')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 
 db.init_app(app)
 
