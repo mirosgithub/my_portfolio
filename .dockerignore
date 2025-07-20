@@ -31,5 +31,3 @@
 **/values.dev.yaml
 LICENSE
 README.*
-instance/
-*.sqlite3

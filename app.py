@@ -13,13 +13,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    if DATABASE_URL.startswith('postgres://'):
-        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-else:
-    DATABASE_PATH = os.path.join('/app/data', 'db.sqlite3')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is required")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 db.init_app(app)
 
@@ -64,3 +61,6 @@ def contact():
         return redirect(url_for('contact'))
     
     return render_template('contact.html', title='Contact', form=form, personal_info=PersonalInfo.query.first())
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
