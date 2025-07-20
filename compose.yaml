@@ -13,6 +13,19 @@ services:
       context: .
     ports:
       - 8080:8080
+    volumes:
+      - portfolio_data:/app/data
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - EMAIL=${EMAIL}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - DATABASE_URL=${DATABASE_URL}
+
+volumes:
+  portfolio_data:
+    driver: local
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to

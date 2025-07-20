@@ -18,6 +18,12 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+# Install system dependencies for PostgreSQL
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
@@ -38,11 +44,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
+# Create data directory for SQLite database (fallback)
+RUN mkdir -p /app/data && chown appuser:appuser /app/data
+
 # Switch to the non-privileged user to run the application.
 USER appuser
 
 # Copy the source code into the container.
-COPY . .
+COPY --chown=appuser:appuser . .
 
 # Expose the port that the application listens on.
 EXPOSE 8080
