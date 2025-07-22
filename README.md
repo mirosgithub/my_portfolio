@@ -69,6 +69,7 @@ my_portfolio/
 - **PostgreSQL**: Primary database
 - **Docker**: Containerisation
 - **Gunicorn**: WSGI server for production
+- **Google Cloud Run**: Serverless Deployment
   
 ## Customisation
 
