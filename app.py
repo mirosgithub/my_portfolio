@@ -62,5 +62,13 @@ def contact():
     
     return render_template('contact.html', title='Contact', form=form, personal_info=PersonalInfo.query.first())
 
+@app.route('/cv')
+def cv():
+    return redirect(url_for('static', filename='pdfs/Suah_Kim_CV.pdf'))
+
+@app.route('/transcript')
+def transcript():
+    return redirect(url_for('static', filename='pdfs/Suah_Kim_Transcript.pdf'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
