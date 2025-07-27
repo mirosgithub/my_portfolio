@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, send_from_directory, url_for
 from flask_login import LoginManager
 from flask_admin import Admin
 from config import SECRET_KEY
@@ -64,11 +64,11 @@ def contact():
 
 @app.route('/cv')
 def cv():
-    return redirect(url_for('static', filename='pdfs/Suah_Kim_CV.pdf'))
+    return send_from_directory('static/pdfs', 'Suah_Kim_CV.pdf')
 
 @app.route('/transcript')
 def transcript():
-    return redirect(url_for('static', filename='pdfs/Suah_Kim_Transcript.pdf'))
+    return send_from_directory('static/pdfs', 'Suah_Kim_Transcript.pdf')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
