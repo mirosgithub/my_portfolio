@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, send_from_directory, url_for
+from flask import Flask, render_template, flash, redirect, send_from_directory, url_for, jsonify
 from flask_login import LoginManager
 from flask_admin import Admin
 from config import SECRET_KEY
@@ -8,15 +8,28 @@ from utils import send_notification_email
 from admin import MyAdminIndexView
 from database import init_db
 import os
+import logging
+from sqlalchemy import text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+logging.basicConfig(level=logging.INFO)
+app.logger.setLevel(logging.INFO)
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL environment variable is required")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_size': 5,
+    'pool_timeout': 30,
+    'pool_recycle': 1800,
+    'pool_pre_ping': True,
+    'max_overflow': 0
+}
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
@@ -32,19 +45,48 @@ admin = Admin(app, index_view=MyAdminIndexView())
 admin.add_view(PersonalInfoView(PersonalInfo, db.session))
 admin.add_view(ProjectsView(Projects, db.session))
 
-init_db(app)
+@app.route('/health')
+def health_check():
+    try:
+        db.session.execute(text('SELECT 1'))
+        return jsonify({'status': 'healthy', 'database': 'connected'}), 200
+    except Exception as e:
+        app.logger.error(f"Health check failed: {str(e)}")
+        return jsonify({'status': 'unhealthy', 'database': 'disconnected', 'error': str(e)}), 503
+
+try:
+    init_db(app)
+except Exception as e:
+    app.logger.error(f"Database initialisation failed: {str(e)}")
 
 @app.route('/')
 def home():
-    return render_template('index.html', personal_info=PersonalInfo.query.first())
+    try:
+        personal_info = PersonalInfo.query.first()
+    except Exception as e:
+        app.logger.error(f"Database error in home route: {str(e)}")
+        personal_info = None
+    return render_template('index.html', personal_info=personal_info)
 
 @app.route('/about')
 def about():
-    return render_template('about.html', personal_info=PersonalInfo.query.first())
+    try:
+        personal_info = PersonalInfo.query.first()
+    except Exception as e:
+        app.logger.error(f"Database error in about route: {str(e)}")
+        personal_info = None
+    return render_template('about.html', personal_info=personal_info)
 
 @app.route('/projects')
 def projects():
-    return render_template('projects.html', projects=Projects.query.all(), personal_info=PersonalInfo.query.first())
+    try:
+        projects_list = Projects.query.all()
+        personal_info = PersonalInfo.query.first()
+    except Exception as e:
+        app.logger.error(f"Database error in projects route: {str(e)}")
+        projects_list = []
+        personal_info = None
+    return render_template('projects.html', projects=projects_list, personal_info=personal_info)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -55,12 +97,22 @@ def contact():
         email = form.email.data
         message = form.message.data
         
-        send_notification_email(name, email, message)
-        flash(f"Thanks for reaching out, {name.split()[0]}! I'll be in touch with you soon.")
+        try:
+            send_notification_email(name, email, message)
+            flash(f"Thanks for reaching out, {name.split()[0]}! I'll be in touch with you soon.")
+        except Exception as e:
+            app.logger.error(f"Email sending failed: {str(e)}")
+            flash("Sorry, there was an error sending your message. Please try again later.")
 
         return redirect(url_for('contact'))
     
-    return render_template('contact.html', title='Contact', form=form, personal_info=PersonalInfo.query.first())
+    try:
+        personal_info = PersonalInfo.query.first()
+    except Exception as e:
+        app.logger.error(f"Database error in contact route: {str(e)}")
+        personal_info = None
+    
+    return render_template('contact.html', title='Contact', form=form, personal_info=personal_info)
 
 @app.route('/cv')
 def cv():
