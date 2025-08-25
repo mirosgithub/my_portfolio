@@ -11,6 +11,7 @@ class PersonalInfo(db.Model):
     title = db.Column(db.String(30))
     bio = db.Column(db.Text)
     github = db.Column(db.String(30))
+    linkedin = db.Column(db.String(100))
     email = db.Column(db.String(30))
     profile_image = db.Column(db.String(30))
     
@@ -23,7 +24,7 @@ class Projects(db.Model):
     category = db.Column(db.String(50))
     description = db.Column(db.Text)
     github_url = db.Column(db.String(50))
-    live_url = db.Column(db.String(50))
+    live_url = db.Column(db.String(100))
     
     def __repr__(self):
         return f'<Project {self.title}>'

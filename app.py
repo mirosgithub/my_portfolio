@@ -1,12 +1,12 @@
 from flask import Flask, render_template, flash, redirect, send_from_directory, url_for, jsonify
 from flask_login import LoginManager
 from flask_admin import Admin
+from flask_migrate import Migrate
 from config import SECRET_KEY
 from models import db, PersonalInfo, Projects, User, PersonalInfoView, ProjectsView
 from forms import ContactForm
 from utils import send_notification_email
 from admin import MyAdminIndexView
-from database import init_db
 import os
 import logging
 from sqlalchemy import text
@@ -32,6 +32,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 login = LoginManager()
 login.login_view = 'login'
@@ -53,11 +54,6 @@ def health_check():
     except Exception as e:
         app.logger.error(f"Health check failed: {str(e)}")
         return jsonify({'status': 'unhealthy', 'database': 'disconnected', 'error': str(e)}), 503
-
-try:
-    init_db(app)
-except Exception as e:
-    app.logger.error(f"Database initialisation failed: {str(e)}")
 
 @app.route('/')
 def home():
