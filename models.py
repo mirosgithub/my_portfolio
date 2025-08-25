@@ -25,6 +25,7 @@ class Projects(db.Model):
     description = db.Column(db.Text)
     github_url = db.Column(db.String(50))
     live_url = db.Column(db.String(100))
+    order = db.Column(db.Integer, default=0)
     
     def __repr__(self):
         return f'<Project {self.title}>'
@@ -48,6 +49,12 @@ class PersonalInfoView(ModelView):
         return redirect(url_for('admin.login_view'))
 
 class ProjectsView(ModelView):
+    column_list = ['order', 'title', 'category', 'github_url', 'live_url']
+    column_default_sort = ('order', False)
+    column_sortable_list = ['order', 'title', 'category']
+    column_searchable_list = ['title', 'category', 'description']
+    form_excluded_columns = ['id']
+    
     def is_accessible(self):
         return current_user.is_authenticated
     

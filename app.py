@@ -76,7 +76,7 @@ def about():
 @app.route('/projects')
 def projects():
     try:
-        projects_list = Projects.query.all()
+        projects_list = Projects.query.order_by(Projects.order.asc()).all()
         personal_info = PersonalInfo.query.first()
     except Exception as e:
         app.logger.error(f"Database error in projects route: {str(e)}")
