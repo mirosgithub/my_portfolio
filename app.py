@@ -96,6 +96,12 @@ def contact():
         try:
             send_notification_email(name, email, message)
             flash(f"Thanks for reaching out, {name.split()[0]}! I'll be in touch with you soon.")
+        except ValueError as e:
+            if "Spam detected" in str(e):
+                flash("Your message appears to be spam and has been rejected. Please ensure your message is genuine and relevant.")
+            else:
+                flash("Sorry, there was an error with your message. Please try again.")
+            app.logger.warning(f"Spam attempt blocked: {name} ({email}) - {str(e)}")
         except Exception as e:
             app.logger.error(f"Email sending failed: {str(e)}")
             flash("Sorry, there was an error sending your message. Please try again later.")

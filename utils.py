@@ -3,8 +3,27 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from config import SMTP_CONFIG
 
+def is_spam_message(name, email, message):
+    spam_keywords = [
+        'seo', 'search engine', 'google search', 'search index', 'search register',
+        'instagram growth', 'social media growth', 'follower', 'likes', 'views',
+        'website traffic', 'backlink', 'ranking', 'optimization', 'marketing',
+        'promote', 'advertise', 'boost', 'increase', 'improve visibility', 'hosting', 'domain'
+    ]
+    
+    text_to_check = f"{name} {email} {message}".lower()
+    
+    for keyword in spam_keywords:
+        if keyword in text_to_check:
+            return True, keyword
+    
+    return False, None
+
 def send_notification_email(name, email, message):
-    """Send notification email when contact form is submitted"""
+    is_spam, detected_keyword = is_spam_message(name, email, message)
+    if is_spam:
+        raise ValueError(f"Spam detected: message contains '{detected_keyword}'")
+    
     smtp_email = SMTP_CONFIG['EMAIL']
     smtp_server = SMTP_CONFIG['SERVER']
     smtp_port = SMTP_CONFIG['PORT']
